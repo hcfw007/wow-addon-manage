@@ -8,7 +8,7 @@ function getAddonHomePage () {
     return new Promise((resolve, reject) => {
         fs.stat(path.resolve(__dirname, './temp/addonHomePage.html'), (err, stats) => {
             if (err || !stats.isFile() || (new Date() - stats.mtime > 86400000)) {
-                request(Curseforge.url.home, (err, res) => {
+                request(Curseforge.urls.home, (err, res) => {
                     if (err) {
                         return reject(console.error(err))
                     }
@@ -47,9 +47,21 @@ async function getPageAddonList(page) {
     let list = []
     await page.then(val => {
         let $page = cheerio.load(val)
-        let addonList = $page('li.project-list-item').find('img.aspect__fill')
+        let addonList = $page('li.project-list-item')
         addonList.each((index, item) => {
-            list.push(item.attribs.alt)
+            let addonDetail = {}
+            let $item = $page(item)
+            addonDetail.title = $item.find('img.aspect__fill').attr('alt')
+            addonDetail.url = $item.find('a.avatar__container').attr('href')
+            addonDetail.downloadNum = $item.find('span.has--icon.count--download').text()
+            addonDetail.updateTimeStamp = parseInt(
+                $item.find('span.has--icon.date--updated>abbr.tip.standard-date.standard-datetime')
+                    .attr("data-epoch")
+                ) * 1000
+            addonDetail.updateTimeStr = new Date(addonDetail.updateTimeStamp).toLocaleString()
+            addonDetail.description = $item.find('div.list-item__description>p').attr('title')
+            addonDetail.curseProjectInfo = JSON.parse($item.find('div.list-item__actions>a.button--download').attr("data-action-value"))
+            list.push(addonDetail)
         })
     })
     return list
@@ -83,7 +95,7 @@ async function getAddonCatagories(homepage) {
     return list
 }
 
-getAddonCatagories(getAddonHomePage()).then(val => {
+getPageAddonList(getAddonHomePage()).then(val => {
     console.log(val)
 })
 
