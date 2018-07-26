@@ -68,7 +68,7 @@ async function getAddonCatagories(homepage) {
             let subs = []
             if ($item.next() && $item.next().attr('class').indexOf('tier-holder') > -1) {
                 $subList = $item.next()
-                $subList.children().each((index, item) => {
+                $subList.children().children().each((index, item) => {
                     let subCategory = {}
                     $subItem = $homepage(item)
                     subCategory.title = $subItem.find('p.category__title').text()
@@ -76,7 +76,6 @@ async function getAddonCatagories(homepage) {
                     subs.push(subCategory)
                 })
             }
-            console.log(subs)
             if (subs) category.subCategories = subs
             list.push(category)
         })
