@@ -1,10 +1,14 @@
 const baseUrl = 'https://www.curseforge.com'
+const path = require('path')
 
-const CurseForge = {
+const config = {
     urls: {
         base: baseUrl,
         home: baseUrl + '/wow/addons',
+    },
+    path: {
+        base: path.resolve(__dirname, '../'),
     }
 }
 
-module.exports = CurseForge
+module.exports = config

@@ -2,13 +2,14 @@ const request = require('request')
 const cheerio = require('cheerio')
 const fs = require('fs')
 const path = require('path')
-const Curseforge = require('./src/config.js')
+const config = require('./src/config.js')
+const pageControl = require('./src/pageControl.js')
 
 function getAddonHomePage () {
     return new Promise((resolve, reject) => {
         fs.stat(path.resolve(__dirname, './temp/addonHomePage.html'), (err, stats) => {
             if (err || !stats.isFile() || (new Date() - stats.mtime > 86400000)) {
-                request(Curseforge.urls.home, (err, res) => {
+                request(config.urls.home, (err, res) => {
                     if (err) {
                         return reject(console.error(err))
                     }
@@ -95,7 +96,7 @@ async function getAddonCatagories(homepage) {
     return list
 }
 
-getPageAddonList(getAddonHomePage()).then(val => {
+
+getPageAddonList(pageControl('Action Bars', '/wow/addons/action-bars', 2)).then(val => {
     console.log(val)
 })
-
