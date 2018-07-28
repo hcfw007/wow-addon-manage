@@ -97,6 +97,6 @@ async function getAddonCatagories(homepage) {
 }
 
 
-getPageAddonList(pageControl('Action Bars', '/wow/addons/action-bars', 2)).then(val => {
+getPageAddonList(pageControl('/wow/addons/action-bars', 2)).then(val => {
     console.log(val)
 })
