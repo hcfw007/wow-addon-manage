@@ -5,7 +5,14 @@ const addonTocReader = require('./addonTocReader')
 const addonPath = config.wowPath + '/Interface/Addons/'
 
 fs.readdir(addonPath, (err, files) => {
-    fs.readFile(addonPath + files[0] + '/' + files[0] + '.toc', (err, data) => {
-        console.log(addonTocReader(data.toString()))
+    addonObject = []
+    files.forEach(file => {
+        try {
+            let data = fs.readFileSync(addonPath + file + '/' + file + '.toc')
+            addonObject.push(addonTocReader(data.toString()))
+        } catch(err) {
+            //console.log(err)
+        }
     })
+    console.log(addonObject)
 })
