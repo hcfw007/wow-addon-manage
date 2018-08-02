@@ -9,7 +9,7 @@ fs.readdir(addonPath, (err, files) => {
     files.forEach(file => {
         try {
             let data = fs.readFileSync(addonPath + file + '/' + file + '.toc')
-            addonObject.push(addonTocReader(data.toString()))
+            addonObject.push(addonTocReader(data.toString()).title)
         } catch(err) {
             //console.log(err)
         }
