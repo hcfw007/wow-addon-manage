@@ -12,7 +12,12 @@ function addonTocReader(addonStr) {
         if (lines[i].length <= 1) continue
         if (lines[i][0] == "#" && lines[i][1] == "#") {
             let propertyName = lines[i].split(':')[0].slice(3)
-            let propertyValue = lines[i].split(':')[1]
+            let propertyValue = ''
+            let _line = lines[i].split(':')
+            for (let j = 1; j < _line.length; j ++) {
+                if (parseInt(j) > 1) propertyValue += ":"
+                propertyValue += _line[j]
+            }
             if (!propertyValue) {
                 toc.otherProperties.push(lines[i])
                 continue
