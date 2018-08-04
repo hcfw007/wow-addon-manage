@@ -8,6 +8,14 @@ const config = {
     },
     path: {
         base: path.resolve(__dirname, '../'),
+    },
+    addons: {
+        titleIgnoreList: [
+            'option',
+            'config',
+            '<',
+            '>',
+        ]
     }
 }
 
