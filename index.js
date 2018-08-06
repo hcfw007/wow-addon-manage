@@ -23,22 +23,6 @@ function getAddonHomePage () {
                     return resolve(bodyString)
                 })
             } else {
-                // fs.open(path.resolve(__dirname, './temp/addonHomePage.html'), 'r', (err, fd) => {
-                //     if (err) {
-                //         return reject(console.error(err))
-                //     }
-                //     let buffer = new Buffer.alloc(2 ** 22)
-                //     fs.read(fd, buffer, 0, buffer.length, 0, (err, bytes) => {
-                //         if (err) {
-                //             return reject(console.error(err))
-                //         }
-                //         console.log('Read cached file successfully')
-                //         fs.close(fd, () => {
-                //             console.log('file closed')
-                //             return resolve(buffer.slice(0, bytes).toString())
-                //         })
-                //     })
-                // })
                 fs.readFile(path.resolve(__dirname, './temp/addonHomePage.html'), (err, data) => {
                     if (err) {
                         return reject(console.error(err))
