@@ -22,6 +22,7 @@
   "homepage": "https://github.com/hcfw007/wow-addon-manage#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "download": "^7.1.0",
     "request": "^2.87.0"
   }
 }
