@@ -34,7 +34,7 @@ function checkAddonUpdates() {
                 matchPromiseList.push(matchPromise)
             })
             Promise.all(matchPromiseList).then(res => {
-                console.log(matchPromiseList)
+                console.log('success')
                 resolve(addonUpdateInfoList)
             }).catch(err => {
                 console.log('err')
@@ -44,5 +44,6 @@ function checkAddonUpdates() {
 }
 
 checkAddonUpdates().then(val => {
+    console.log('here')
     console.log(val)
 })
