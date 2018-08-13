@@ -3,19 +3,15 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'app.js'),
+    app: path.resolve(__dirname, './ui/app.js'),
   },
   devtool: 'inline-source-map',
-  devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
-    hot: true,
-  },
   plugins: [
     new VueLoaderPlugin(),
   ],
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, './'),
+    path: path.resolve(__dirname, './ui/dist/'),
     publicPath: '/',
   },
   module: {
