@@ -43,7 +43,13 @@ function checkAddonUpdates() {
     })
 }
 
-checkAddonUpdates().then(val => {
+let t = checkAddonUpdates()
+console.log(t)
+t.then(val => {
     console.log('here')
     console.log(val)
+}).catch(err => {
+    console.log(err)
+}).finally(() => {
+    console.log('fianlly')
 })

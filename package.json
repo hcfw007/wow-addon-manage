@@ -4,7 +4,8 @@
   "description": "Manage World of Warcraft Addons from CurseForge",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "css-loader": "^1.0.0",
+    "electron": "^2.0.8",
     "vue-loader": "^15.3.0",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.5.17",
