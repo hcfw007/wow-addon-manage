@@ -4,6 +4,7 @@ const appConfig = require('./appConfig.js')
 
 function matchAddon(title) {
     return new Promise((resolve, reject) => {
+        let no_match = true
         title_hyphen = title.replace(/ /g, '-')
         request.get(appConfig.urls.home + '/' + title_hyphen + '/files', (err, res) => {
             if (err) {
@@ -16,8 +17,9 @@ function matchAddon(title) {
                 return
             }
             //console.log('hyphen found')
+            no_match = false
             resolve(res.body.toString())
-            return
+            //return
         })
         title_init = title.split(' ')[0]
         if (title_init != title_hyphen) {
@@ -32,11 +34,14 @@ function matchAddon(title) {
                     return
                 }
                 //console.log('init found')
+                no_match = false
                 resolve(res.body.toString())
-                return
+                //return
             })
         }
-        //reject("cannot find any addon match " + title + " on CurseForge")
+        setTimeout(() => {
+            if (no_match) resolve('no match')
+        }, 5000)
     })
 }
 

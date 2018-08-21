@@ -12,6 +12,9 @@ function checkAddonUpdates() {
         getLocalAddonList().then(addonObjects => {
             addonObjects.forEach(addon => {
                 let matchPromise = matchAddon(addon.title).then(addonPage => {
+                    if (addonPage == "no match") {
+                        return
+                    }
                     $download = cheerio.load(addonPage)
                     let fileList = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a')
                     let latestVersion = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a').find('tbody tr:first-child').find('td.project-file__name').attr('title')
@@ -43,13 +46,8 @@ function checkAddonUpdates() {
     })
 }
 
-let t = checkAddonUpdates()
-console.log(t)
-t.then(val => {
-    console.log('here')
+checkAddonUpdates()then(val => {
     console.log(val)
 }).catch(err => {
     console.log(err)
-}).finally(() => {
-    console.log('fianlly')
 })
