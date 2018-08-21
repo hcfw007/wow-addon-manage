@@ -39,6 +39,7 @@ function matchAddon(title) {
                 //return
             })
         }
+        //TODO: use better method to decide matched or not
         setTimeout(() => {
             if (no_match) resolve('no match')
         }, 5000)
