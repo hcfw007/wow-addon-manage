@@ -5,9 +5,9 @@ const matchAddon = require('./matchAddonCursePage.js')
 const getLocalAddonList = require('./getLocalAddonList.js')
 
 
-function checkAddonUpdates() {
+function checkUpdateableAddons() {
     return new Promise((resolve, reject) => {
-        let addonUpdateInfoList = []
+        let updateableAddonInfoList = []
         let matchPromiseList = []
         getLocalAddonList().then(addonObjects => {
             addonObjects.forEach(addon => {
@@ -16,6 +16,7 @@ function checkAddonUpdates() {
                         return
                     }
                     $download = cheerio.load(addonPage)
+                    let name = $download('div.project-header__details>h2.name').text()
                     let fileList = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a')
                     let latestVersion = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a').find('tbody tr:first-child').find('td.project-file__name').attr('title')
                     let downloadURL = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a').find('tbody tr:first-child').find('a.button.button--download.download-button.mg-r-05').attr('href')
@@ -23,12 +24,13 @@ function checkAddonUpdates() {
                     let uploadTimeStamp = parseInt($download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a').find('tbody tr:first-child').find('abbr.tip.standard-date.standard-datetime').attr('data-epoch'))
                     if (latestVersion && downloadURL) {
                         //console.log(addon.title + 'v' + latestVersion + ': ' + downloadURL)
-                        let addonUpdateInfo = {}
-                        addonUpdateInfo.latestVersion = latestVersion
-                        addonUpdateInfo.gameVersion = gameVersion
-                        addonUpdateInfo.uploadTimeStamp = parseInt(uploadTimeStamp) * 1000
-                        addonUpdateInfo.downloadURL = downloadURL
-                        addonUpdateInfoList.push(addonUpdateInfo)
+                        let updateableAddonInfo = {}
+                        updateableAddonInfo.name = name
+                        updateableAddonInfo.latestVersion = latestVersion
+                        updateableAddonInfo.gameVersion = gameVersion
+                        updateableAddonInfo.uploadTimeStamp = parseInt(uploadTimeStamp) * 1000
+                        updateableAddonInfo.downloadURL = downloadURL
+                        updateableAddonInfoList.push(updateableAddonInfo)
                     } else {
                         //console.log('cannot find page for ' + addon.title)
                     }
@@ -38,7 +40,7 @@ function checkAddonUpdates() {
             })
             Promise.all(matchPromiseList).then(res => {
                 console.log('success')
-                resolve(addonUpdateInfoList)
+                resolve(updateableAddonInfoList)
             }).catch(err => {
                 console.log('err')
             })
@@ -46,8 +48,4 @@ function checkAddonUpdates() {
     })
 }
 
-checkAddonUpdates().then(val => {
-    console.log(val)
-}).catch(err => {
-    console.log(err)
-})
+module.exports = checkUpdateableAddons

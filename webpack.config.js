@@ -14,6 +14,11 @@ module.exports = {
     path: path.resolve(__dirname, './ui/dist/'),
     publicPath: '/',
   },
+  node: {
+    fs: "empty",
+    tls: "empty",
+    net: "empty",
+  },
   module: {
     rules: [
       {
