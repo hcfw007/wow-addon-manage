@@ -14,11 +14,6 @@ module.exports = {
     path: path.resolve(__dirname, './ui/dist/'),
     publicPath: '/',
   },
-  node: {
-    fs: "empty",
-    tls: "empty",
-    net: "empty",
-  },
   module: {
     rules: [
       {
@@ -34,5 +29,6 @@ module.exports = {
       },
     ]
   },
+  target: "electron-main",
   mode: "development"
 }

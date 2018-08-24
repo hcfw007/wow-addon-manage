@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {checkUpdateableAddons} from '../src/checkUpdateableAddons.js'
+import checkUpdateableAddons from '../src/checkUpdateableAddons.js'
 
 export default {
   name: 'app',
@@ -20,8 +20,7 @@ export default {
     }
   },
   created: function() {
-    console.log(checkUpdateableAddons)
-    checkAddonUpdates().then(val => {
+    checkUpdateableAddons().then(val => {
       this.addons = val
     })
   },
