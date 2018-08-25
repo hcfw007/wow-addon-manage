@@ -17,6 +17,7 @@ function getLocalAddonList() {
                     //console.log(err)
                 }
             })
+            console.log(addonObjects)
             for (let i in addonObjects) {
                 if (addonFilter(addonObjects[i])) {
                     addonObjects[i].title = addonFilter(addonObjects[i])

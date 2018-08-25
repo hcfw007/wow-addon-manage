@@ -9,9 +9,10 @@ function checkUpdateableAddons() {
     return new Promise((resolve, reject) => {
         let updateableAddonInfoList = []
         let matchPromiseList = []
+        let matchedList = []
         getLocalAddonList().then(addonObjects => {
             addonObjects.forEach(addon => {
-                let matchPromise = matchAddon(addon.title).then(addonPage => {
+                let matchPromise = matchAddon(addon.title, matchedList).then(addonPage => {
                     if (addonPage == "no match") {
                         return
                     }
@@ -38,11 +39,11 @@ function checkUpdateableAddons() {
                 })
                 matchPromiseList.push(matchPromise)
             })
+            console.log(matchedList)
             Promise.all(matchPromiseList).then(res => {
-                console.log('success')
                 resolve(updateableAddonInfoList)
             }).catch(err => {
-                console.log('err')
+                console.log(err)
             })
         })
     })

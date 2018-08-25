@@ -21,6 +21,7 @@ export default {
   },
   created: function() {
     checkUpdateableAddons().then(val => {
+      console.log(val)
       this.addons = val
     })
   },
