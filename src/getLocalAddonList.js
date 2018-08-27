@@ -11,13 +11,15 @@ function getLocalAddonList() {
             addonObjects = []
             files.forEach(file => {
                 try {
-                    let data = fs.readFileSync(addonPath + file + '/' + file + '.toc')
-                    addonObjects.push(addonTocReader(data.toString()))
+                    let tocFile = addonPath + file + '/' + file + '.toc'
+                    let data = fs.readFileSync(tocFile)
+                    let addonObject = addonTocReader(data.toString())
+                    addonObject.currentTimeStamp = fs.statSync(tocFile).mtime.getTime()
+                    addonObjects.push(addonObject)
                 } catch(err) {
                     //console.log(err)
                 }
             })
-            console.log(addonObjects)
             for (let i in addonObjects) {
                 if (addonFilter(addonObjects[i])) {
                     addonObjects[i].title = addonFilter(addonObjects[i])

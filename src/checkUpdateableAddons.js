@@ -31,6 +31,8 @@ function checkUpdateableAddons() {
                         updateableAddonInfo.gameVersion = gameVersion
                         updateableAddonInfo.uploadTimeStamp = parseInt(uploadTimeStamp) * 1000
                         updateableAddonInfo.downloadURL = downloadURL
+                        updateableAddonInfo.currentVersion = addon.version
+                        updateableAddonInfo.currentTimeStamp = addon.currentTimeStamp
                         updateableAddonInfoList.push(updateableAddonInfo)
                     } else {
                         //console.log('cannot find page for ' + addon.title)
