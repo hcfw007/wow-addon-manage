@@ -15,7 +15,8 @@
         <div class="addon-version">{{ filterVersion(addon.latestVersion) }}</div>
         <div class="game-version">{{ filterVersion(addon.gameVersion) }}</div>
         <div class="update-time">{{ getTime(addon.uploadTimeStamp) }}</div>
-        <div class="update">Up-To-Date</div>
+        <div class="update" v-if="updateable(addon)">Up-To-Date</div>
+        <div class="update" v-else @click="update(addon)"><button>Update</button></div>
       </li>
     </ul>
   </div>
@@ -43,6 +44,24 @@ export default {
     },
     filterVersion: function(version) {
       return version.replace(/[a-zA-Z]/g,"")
+    },
+    getNum: function(text){
+      return parseInt(text.replace(/[^0-9]/ig,""))
+    },
+    updateable: function(addon) {
+      if (addon.currentVersion) {
+        if (this.getNum(addon.currentVersion) != this.getNum(addon.latestVersion)) {
+          return true
+        }
+      } else {
+        if (addon.currentTimeStamp < addon.uploadTimeStamp) {
+          return true
+        }
+      }
+      return false
+    },
+    update: function(addon) {
+      console.log(addon) //TODO download and uzip addon
     },
   },
 }
