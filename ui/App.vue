@@ -15,8 +15,10 @@
         <div class="addon-version">{{ filterVersion(addon.latestVersion) }}</div>
         <div class="game-version">{{ filterVersion(addon.gameVersion) }}</div>
         <div class="update-time">{{ getTime(addon.uploadTimeStamp) }}</div>
-        <div class="update" v-if="updateable(addon)">Up-To-Date</div>
-        <div class="update" v-else @click="update(addon)"><button>Update</button></div>
+        <div class="update" v-if="addon.status == 'up-to-date'">Up-To-Date</div>
+        <div class="update" v-if="addon.status == 'updateable'" @click="update(addon)"><button>Update</button></div>
+        <div class="update" v-if="addon.status == 'updating'">{{ updateAni }}</div>
+        <div class="update" v-if="addon.status == 'updated'">Updated</div>
       </li>
     </ul>
   </div>
@@ -30,13 +32,29 @@ export default {
   data() {
     return {
       addons: [],
+      downloadList: [],
+      updateAni: "Updating",
     }
   },
   created: function() {
     checkUpdateableAddons().then(val => {
-      console.log(val)
+      for (let i in val) {
+        if (this.updateable(val[i])) {
+          val[i].status = "updateable"
+        } else {
+          val[i].status = "up-to-date"
+        }
+      }
       this.addons = val
     })
+    function updateAniNextFrame() {
+      if (this.updateAni == "Updating...") {
+        this.updateAni = "Updating"
+      } else {
+        this.updateAni += "."
+      }
+    }
+    setInterval(updateAniNextFrame, 1000)
   },
   methods: {
     getTime: function(stamp) {
@@ -61,7 +79,8 @@ export default {
       return false
     },
     update: function(addon) {
-      console.log(addon) //TODO download and uzip addon
+      addon.status = "updating"
+      
     },
   },
 }
