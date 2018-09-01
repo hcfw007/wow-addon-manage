@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/hcfw007/wow-addon-manage#readme",
   "dependencies": {
+    "adm-zip": "^0.4.11",
     "cheerio": "^1.0.0-rc.2",
-    "download": "^7.1.0",
     "request": "^2.87.0",
     "vue": "^2.5.17"
   },
