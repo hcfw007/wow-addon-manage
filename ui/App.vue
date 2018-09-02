@@ -19,6 +19,7 @@
         <div class="update" v-if="addon.status == 'updateable'" @click="update(addon)"><button>Update</button></div>
         <div class="update" v-if="addon.status == 'updating'">{{ updateAni }}</div>
         <div class="update" v-if="addon.status == 'updated'">Updated</div>
+        <div class="update" v-if="addon.status == 'error'">Error<button @click="update(addon)">Try again</button></div>
       </li>
     </ul>
   </div>
@@ -26,6 +27,8 @@
 
 <script>
 import checkUpdateableAddons from '../src/checkUpdateableAddons.js'
+import download from '../src/download.js'
+import unzip from '../src/unzip.js'
 
 export default {
   name: 'app',
@@ -80,7 +83,14 @@ export default {
     },
     update: function(addon) {
       addon.status = "updating"
-      
+      let fileName = addon.name + ".zip"
+      download(addon.downloadURL, fileName).then(() => {
+        unzip("../temp/" + fileName)
+        addon.status = "updated"
+      }).catch(err => {
+        console.log(err)
+        addon.status = "error"
+      })
     },
   },
 }
