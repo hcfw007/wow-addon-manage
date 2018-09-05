@@ -17,7 +17,7 @@
         <div class="update-time">{{ getTime(addon.uploadTimeStamp) }}</div>
         <div class="update" v-if="addon.status == 'up-to-date'">Up-To-Date</div>
         <div class="update" v-if="addon.status == 'updateable'" @click="update(addon)"><button>Update</button></div>
-        <div class="update" v-if="addon.status == 'updating'">{{ updateAni }}</div>
+        <div class="update" v-if="addon.status == 'updating'">Updating ...</div>
         <div class="update" v-if="addon.status == 'updated'">Updated</div>
         <div class="update" v-if="addon.status == 'error'">Error<button @click="update(addon)">Try again</button></div>
       </li>
@@ -36,7 +36,6 @@ export default {
     return {
       addons: [],
       downloadList: [],
-      updateAni: "Updating",
     }
   },
   created: function() {
@@ -50,14 +49,6 @@ export default {
       }
       this.addons = val
     })
-    function updateAniNextFrame() {
-      if (this.updateAni == "Updating...") {
-        this.updateAni = "Updating"
-      } else {
-        this.updateAni += "."
-      }
-    }
-    setInterval(updateAniNextFrame, 1000)
   },
   methods: {
     getTime: function(stamp) {
@@ -85,7 +76,8 @@ export default {
       addon.status = "updating"
       let fileName = addon.name + ".zip"
       download(addon.downloadURL, fileName).then(() => {
-        unzip("../temp/" + fileName)
+        console.log("unzipping", fileName)
+        unzip("./temp/" + fileName)
         addon.status = "updated"
       }).catch(err => {
         console.log(err)
