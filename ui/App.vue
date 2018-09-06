@@ -8,7 +8,7 @@
         <div class="addon-version">Latest Version</div>
         <div class="game-version">Game Version</div>
         <div class="update-time">Update Date</div>
-        <div class="update">Update</div>
+        <div class="update"><button @click="updateAll()">Update All</button></div>
       </li>
       <li v-for="addon in addons" :key="addon.name" class="main-list-item">
         <div class="title">{{ addon.name }}</div>
@@ -83,6 +83,13 @@ export default {
         console.log(err)
         addon.status = "error"
       })
+    },
+    updateAll: function() {
+      for (let i in this.addons) {
+        if (this.addons[i].status == "updateable") {
+            this.update(this.addons[i])
+        }
+      }
     },
   },
 }
