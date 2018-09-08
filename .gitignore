@@ -2,3 +2,4 @@
 node_modules/
 temp/
 src/config.json
+config.json

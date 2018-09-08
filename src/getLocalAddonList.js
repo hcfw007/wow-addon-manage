@@ -1,11 +1,8 @@
 const fs = require('fs')
-const config = require('./config.json')
 const appConfig = require('./appConfig')
 const addonTocReader = require('./addonTocReader')
 
-const addonPath = config.wowPath + '/Interface/Addons/'
-
-function getLocalAddonList() {
+function getLocalAddonList(addonPath) {
     return new Promise((resolve, reject) => {
         fs.readdir(addonPath, (err, files) => {
             addonObjects = []
@@ -26,6 +23,7 @@ function getLocalAddonList() {
                 }
             }
             resolve(addonObjects)
+            console.log(addonObjects)
         })
     })
 }

@@ -5,12 +5,12 @@ const matchAddon = require('./matchAddonCursePage.js')
 const getLocalAddonList = require('./getLocalAddonList.js')
 
 
-function checkUpdateableAddons() {
+function checkUpdateableAddons(addonPath) {
     return new Promise((resolve, reject) => {
         let updateableAddonInfoList = []
         let matchPromiseList = []
         let matchedList = []
-        getLocalAddonList().then(addonObjects => {
+        getLocalAddonList(addonPath).then(addonObjects => {
             addonObjects.forEach(addon => {
                 let matchPromise = matchAddon(addon.title, matchedList).then(addonPage => {
                     if (addonPage == "no match") {

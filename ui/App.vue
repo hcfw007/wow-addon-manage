@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>WoW Addon Manage</h1>
+    <span>WoW Path:</span><input type="text" v-model="wowPath"><div><button @click="updateWowPath()">update</button></div>
     <h5 v-if="addons.length < 1">Loading...</h5>
     <ul class="main-list" v-else>
       <li class="main-list-item">
@@ -29,6 +30,7 @@
 import checkUpdateableAddons from '../src/checkUpdateableAddons.js'
 import download from '../src/download.js'
 import unzip from '../src/unzip.js'
+import configControl from '../src/configControl.js'
 
 export default {
   name: 'app',
@@ -36,21 +38,36 @@ export default {
     return {
       addons: [],
       downloadList: [],
+      config: {},
+      wowPath: "",
     }
   },
   created: function() {
-    checkUpdateableAddons().then(val => {
-      for (let i in val) {
-        if (this.updateable(val[i])) {
-          val[i].status = "updateable"
-        } else {
-          val[i].status = "up-to-date"
-        }
-      }
-      this.addons = val
-    })
+    this.config = configControl.getConfig()
+    if (this.config.wowPath.length > 2) {
+      this.wowPath = this.config.wowPath
+      this.checkAddons()
+    }
   },
   methods: {
+    checkAddons: function() {
+      checkUpdateableAddons(this.wowPath).then(val => {
+        for (let i in val) {
+          if (this.updateable(val[i])) {
+            val[i].status = "updateable"
+          } else {
+            val[i].status = "up-to-date"
+          }
+        }
+        this.addons = val
+      })
+    },
+    updateWowPath: function() {
+      let configObj = {
+        wowPath: this.wowPath,
+      }
+      configControl.setConfig(configObj)
+    },
     getTime: function(stamp) {
       return new Date(stamp).toLocaleDateString()
     },
