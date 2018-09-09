@@ -6,7 +6,7 @@ const appConfig = require('./appConfig.js')
 
 function download(url, filename = 'temp.zip') {
     return new Promise((resolve, reject) => {
-        if (fs.existsSync(path.resolve('./temp/'))) {
+        if (!fs.existsSync(path.resolve('./temp/'))) {
             fs.mkdirSync(path.resolve('./temp/'))
         }
         let file = path.resolve('./temp/' + filename) //TODO temp dir may differ in package

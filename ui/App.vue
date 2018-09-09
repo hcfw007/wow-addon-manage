@@ -2,27 +2,30 @@
   <div>
     <h1>WoW Addon Manage</h1>
     <span>WoW Path:</span><input type="text" v-model="wowPath"><div><button @click="updateWowPath()">update</button></div>
-    <h5 v-if="addons.length < 1">Loading...</h5>
-    <ul class="main-list" v-else>
-      <li class="main-list-item">
-        <div class="title">Addon Title</div>
-        <div class="addon-version">Latest Version</div>
-        <div class="game-version">Game Version</div>
-        <div class="update-time">Update Date</div>
-        <div class="update"><button @click="updateAll()">Update All</button></div>
-      </li>
-      <li v-for="addon in addons" :key="addon.name" class="main-list-item">
-        <div class="title">{{ addon.name }}</div>
-        <div class="addon-version">{{ filterVersion(addon.latestVersion) }}</div>
-        <div class="game-version">{{ filterVersion(addon.gameVersion) }}</div>
-        <div class="update-time">{{ getTime(addon.uploadTimeStamp) }}</div>
-        <div class="update" v-if="addon.status == 'up-to-date'">Up-To-Date</div>
-        <div class="update" v-if="addon.status == 'updateable'" @click="update(addon)"><button>Update</button></div>
-        <div class="update" v-if="addon.status == 'updating'">Updating ...</div>
-        <div class="update" v-if="addon.status == 'updated'">Updated</div>
-        <div class="update" v-if="addon.status == 'error'">Error<button @click="update(addon)">Try again</button></div>
-      </li>
-    </ul>
+    <h5 v-if="!validPath(wowPath)">Invalid WoW Path</h5>
+    <div v-else>
+      <h5 v-if="addons.length < 1">Loading...</h5>
+      <ul class="main-list" v-else>
+        <li class="main-list-item">
+          <div class="title">Addon Title</div>
+          <div class="addon-version">Latest Version</div>
+          <div class="game-version">Game Version</div>
+          <div class="update-time">Update Date</div>
+          <div class="update"><button @click="updateAll()">Update All</button></div>
+        </li>
+        <li v-for="addon in addons" :key="addon.name" class="main-list-item">
+          <div class="title">{{ addon.name }}</div>
+          <div class="addon-version">{{ filterVersion(addon.latestVersion) }}</div>
+          <div class="game-version">{{ filterVersion(addon.gameVersion) }}</div>
+          <div class="update-time">{{ getTime(addon.uploadTimeStamp) }}</div>
+          <div class="update" v-if="addon.status == 'up-to-date'">Up-To-Date</div>
+          <div class="update" v-if="addon.status == 'updateable'" @click="update(addon)"><button>Update</button></div>
+          <div class="update" v-if="addon.status == 'updating'">Updating ...</div>
+          <div class="update" v-if="addon.status == 'updated'">Updated</div>
+          <div class="update" v-if="addon.status == 'error'">Error<button @click="update(addon)">Try again</button></div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -44,12 +47,21 @@ export default {
   },
   created: function() {
     this.config = configControl.getConfig()
-    if (this.config.wowPath.length > 2) {
+    if (this.validPath(this.config.wowPath)) {
       this.wowPath = this.config.wowPath
       this.checkAddons()
     }
   },
   methods: {
+    validPath: function(path) {
+      if (path && path.length > 2) {
+        let _path = path.toLowerCase()
+        if (_path.indexOf("interface") > -1 && _path.indexOf("addons") > -1) {
+          return true
+        }
+      }
+      return false
+    },
     checkAddons: function() {
       checkUpdateableAddons(this.wowPath).then(val => {
         for (let i in val) {
@@ -63,10 +75,13 @@ export default {
       })
     },
     updateWowPath: function() {
-      let configObj = {
-        wowPath: this.wowPath,
+      if (this.validPath(this.wowPath)) {
+        let configObj = {
+          wowPath: this.wowPath,
+        }
+        configControl.setConfig(configObj)
+        this.checkAddons()
       }
-      configControl.setConfig(configObj)
     },
     getTime: function(stamp) {
       return new Date(stamp).toLocaleDateString()
