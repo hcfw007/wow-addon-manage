@@ -34,6 +34,7 @@ import checkUpdateableAddons from '../src/checkUpdateableAddons.js'
 import download from '../src/download.js'
 import unzip from '../src/unzip.js'
 import configControl from '../src/configControl.js'
+import fs from 'fs'
 
 export default {
   name: 'app',
@@ -54,7 +55,7 @@ export default {
   },
   methods: {
     validPath: function(path) {
-      if (path && path.length > 2) {
+      if (path && fs.existsSync(path)) {
         let _path = path.toLowerCase()
         if (_path.indexOf("interface") > -1 && _path.indexOf("addons") > -1) {
           return true
