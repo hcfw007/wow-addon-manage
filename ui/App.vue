@@ -1,10 +1,14 @@
 <template>
   <div>
     <h1>WoW Addon Manage</h1>
-    <span>WoW Path:</span><input type="text" v-model="wowPath"><div><button @click="updateWowPath()">update</button></div>
+    <span>WoW Path:</span><input type="text" v-model="wowPath" disabled style="width: 500px">
+    <div>
+      <button @click="selectPath()">Select</button>
+      <button @click="updateWowPath()">update</button>
+    </div>
     <h5 v-if="!validPath(wowPath)">Invalid WoW Path</h5>
     <div v-else>
-      <h5 v-if="addons.length < 1">Loading...</h5>
+      <h5 v-if="addons.length < 1">Loading... or Reloading...</h5>
       <ul class="main-list" v-else>
         <li class="main-list-item">
           <div class="title">Addon Title</div>
@@ -35,6 +39,7 @@ import download from '../src/download.js'
 import unzip from '../src/unzip.js'
 import configControl from '../src/configControl.js'
 import fs from 'fs'
+const {dialog} = require('electron').remote
 
 export default {
   name: 'app',
@@ -54,6 +59,15 @@ export default {
     }
   },
   methods: {
+    selectPath: function() {
+      let path = dialog.showOpenDialog({properties: ['openDirectory']})[0]
+      if (this.validPath(path)) {
+        this.wowPath = path
+        this.updateWowPath()
+      } else {
+        alert("Invalid World of Warcraft Path")
+      }
+    },
     validPath: function(path) {
       if (path && fs.existsSync(path)) {
         let _path = path.toLowerCase()
@@ -64,6 +78,7 @@ export default {
       return false
     },
     checkAddons: function() {
+      this.addons = []
       checkUpdateableAddons(this.wowPath).then(val => {
         for (let i in val) {
           if (this.updateable(val[i])) {
@@ -71,6 +86,9 @@ export default {
           } else {
             val[i].status = "up-to-date"
           }
+        }
+        if (val.length == 0) {
+          val = [{title: 'cannot find any addon'}]
         }
         this.addons = val
       })
@@ -152,5 +170,15 @@ div.update {
 }
 .main-list-item>div {
   display: inline-block;
+}
+button, .button {
+  cursor: pointer;
+  align-items: flex-start;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 2px 6px 3px;
+  border-width: 2px;
+  border-style: outset;
+  border-color: buttonface;
 }
 </style>

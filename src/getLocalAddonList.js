@@ -8,7 +8,7 @@ function getLocalAddonList(addonPath) {
             addonObjects = []
             files.forEach(file => {
                 try {
-                    let tocFile = addonPath + file + '/' + file + '.toc'
+                    let tocFile = addonPath + '/' + file + '/' + file + '.toc'
                     let data = fs.readFileSync(tocFile)
                     let addonObject = addonTocReader(data.toString())
                     addonObject.currentTimeStamp = fs.statSync(tocFile).mtime.getTime()
