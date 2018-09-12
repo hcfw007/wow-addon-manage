@@ -1,10 +1,9 @@
 <template>
   <div>
     <h1>WoW Addon Manage</h1>
-    <span>WoW Path:</span><input type="text" v-model="wowPath" disabled style="width: 500px">
+    <span>WoW Addon Folder Path:</span><input type="text" v-model="wowPath" disabled style="width: 500px">
     <div>
       <button @click="selectPath()">Select</button>
-      <button @click="updateWowPath()">update</button>
     </div>
     <h5 v-if="!validPath(wowPath)">Invalid WoW Path</h5>
     <div v-else>
