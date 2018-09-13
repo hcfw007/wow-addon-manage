@@ -135,6 +135,10 @@ export default {
         console.log("unzipping", fileName)
         unzip("./temp/" + fileName)
         addon.status = "updated"
+      }).catch(err => {
+        console.log(err)
+        addon.status = "error"
+      }).finally(() => {
         for (let i in this.downloadList) {
           if (this.downloadList[i] == fileName) {
             this.downloadList.splice(i, 1)
@@ -143,9 +147,6 @@ export default {
             }
           }
         }
-      }).catch(err => {
-        console.log(err)
-        addon.status = "error"
       })
     },
     updateAll: function() {
