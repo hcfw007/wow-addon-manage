@@ -7,8 +7,8 @@
     </div>
     <h5 v-if="!validPath(wowPath)">Invalid WoW Path</h5>
     <div v-else>
-      <h5 v-if="addons.length < 1">Loading... or Reloading...</h5>
-      <ul class="main-list" v-else>
+      <h5>Status: {{ status }}</h5>
+      <ul class="main-list" v-if="addons.length > 0">
         <li class="main-list-item">
           <div class="title">Addon Title</div>
           <div class="addon-version">Latest Version</div>
@@ -48,6 +48,7 @@ export default {
       downloadList: [],
       config: {},
       wowPath: "",
+      status: "ready",
     }
   },
   created: function() {
@@ -78,6 +79,7 @@ export default {
     },
     checkAddons: function() {
       this.addons = []
+      this.status = "searching addons"
       checkUpdateableAddons(this.wowPath).then(val => {
         for (let i in val) {
           if (this.updateable(val[i])) {
@@ -87,7 +89,9 @@ export default {
           }
         }
         if (val.length == 0) {
-          val = [{title: 'cannot find any addon'}]
+          this.status = "no addon found"
+        } else {
+          this.status = "addons search complete"
         }
         this.addons = val
       })
@@ -123,12 +127,22 @@ export default {
       return false
     },
     update: function(addon) {
+      this.status = "updating"
       addon.status = "updating"
       let fileName = addon.name + ".zip"
+      this.downloadList.push(fileName)
       download(addon.downloadURL, fileName).then(() => {
         console.log("unzipping", fileName)
         unzip("./temp/" + fileName)
         addon.status = "updated"
+        for (let i in this.downloadList) {
+          if (this.downloadList[i] == fileName) {
+            this.downloadList.splice(i, 1)
+            if (this.downloadList.length == 0) {
+              this.status = "update complete"
+            }
+          }
+        }
       }).catch(err => {
         console.log(err)
         addon.status = "error"
@@ -169,15 +183,5 @@ div.update {
 }
 .main-list-item>div {
   display: inline-block;
-}
-button, .button {
-  cursor: pointer;
-  align-items: flex-start;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 2px 6px 3px;
-  border-width: 2px;
-  border-style: outset;
-  border-color: buttonface;
 }
 </style>
