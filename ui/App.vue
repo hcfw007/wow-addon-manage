@@ -158,7 +158,7 @@ export default {
     },
     updateAll: function() {
       for (let i in this.addons) {
-        if (this.addons[i].status == "updateable") {
+        if (this.addons[i].status == "updateable" || this.addons[i].status == "error") {
             this.update(this.addons[i])
         }
       }
