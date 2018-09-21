@@ -22,7 +22,7 @@ function download(url, filename = 'temp.zip') {
         })
         setTimeout(() => {
             reject("time out")
-        }, 10000)
+        }, 20000)
     })
     
 }

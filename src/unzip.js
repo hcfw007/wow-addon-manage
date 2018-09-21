@@ -1,6 +1,6 @@
 const Zip = require("adm-zip")
 
-function unzip(file, target, addonPath) {
+function unzip(file, addonPath) {
     let zipObj = new Zip(file)
     zipObj.extractAllToAsync(addonPath, true)
 }

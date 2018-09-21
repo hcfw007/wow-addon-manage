@@ -133,7 +133,7 @@ export default {
       this.downloadList.push(fileName)
       download(addon.downloadURL, fileName).then(() => {
         console.log("unzipping", fileName)
-        unzip("./temp/" + fileName)
+        unzip("./temp/" + fileName, this.wowPath)
         addon.status = "updated"
         for (let i in this.downloadList) {
           if (this.downloadList[i] == fileName) {
