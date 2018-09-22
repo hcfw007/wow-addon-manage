@@ -49,7 +49,10 @@ function matchAddon(title, matchedList) {
         }
         //TODO: use better method to decide matched or not
         setTimeout(() => {
-            if (no_match) resolve('no match')
+            if (no_match) {
+                resolve('no match')
+                console.log(title)
+            }
         }, 15000)
     })
 }
