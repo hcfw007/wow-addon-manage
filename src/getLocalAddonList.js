@@ -5,21 +5,23 @@ const addonTocReader = require('./addonTocReader')
 function getLocalAddonList(addonPath) {
     return new Promise((resolve, reject) => {
         fs.readdir(addonPath, (err, files) => {
-            addonObjects = []
+            _addonObjects = []
             files.forEach(file => {
                 try {
                     let tocFile = addonPath + '/' + file + '/' + file + '.toc'
                     let data = fs.readFileSync(tocFile)
                     let addonObject = addonTocReader(data.toString())
                     addonObject.currentTimeStamp = fs.statSync(tocFile).mtime.getTime()
-                    addonObjects.push(addonObject)
+                    _addonObjects.push(addonObject)
                 } catch(err) {
                     //console.log(err)
                 }
             })
-            for (let i in addonObjects) {
-                if (addonFilter(addonObjects[i])) {
-                    addonObjects[i].title = addonFilter(addonObjects[i])
+            addonObjects = []
+            for (let i in _addonObjects) {
+                if (addonFilter(_addonObjects[i])) {
+                    _addonObjects[i].title = addonFilter(_addonObjects[i])
+                    addonObjects.push(_addonObjects[i])
                 }
             }
             resolve(addonObjects)
