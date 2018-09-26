@@ -15,6 +15,7 @@ const config = {
             'config',
             '<',
             '>',
+            'control pannel',
         ]
     }
 }
