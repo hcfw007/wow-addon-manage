@@ -33,14 +33,15 @@ function getLocalAddonList(addonPath) {
 
 
 function addonFilter(addon) {
-    let _title = addon.title.toLowerCase()
+    let title = addon.title
+    let _title = title.toLowerCase()
     for (let i in appConfig.addons.titleIgnoreList) {
         if (_title.indexOf(appConfig.addons.titleIgnoreList[i]) > -1) {
             return false
         }
     }
-    if (_title.indexOf('core') > -1) return _title.slice(0, _title.indexOf('core') - 1)
-    return _title
+    if (_title.indexOf('core') > -1) return title.slice(0, _title.indexOf('core') - 1)
+    return title
 }
 
 module.exports = getLocalAddonList
