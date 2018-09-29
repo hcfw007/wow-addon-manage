@@ -2,8 +2,9 @@ const request = require('request')
 const cheerio = require('cheerio')
 const appConfig = require('./appConfig.js')
 
-function matchAddon(title, matchedList) {
+function matchAddon(title, matchedList, history) {
     return new Promise((resolve, reject) => {
+        let origin_title = title
         let no_match = true
         title_upper_seperated = title.replace(/\S[A-Z][a-z]+?/g, function(word) {
             return word[0] + " " + word.slice(1)
@@ -23,7 +24,8 @@ function matchAddon(title, matchedList) {
             let _t = t.replace(/ /g, '-')
             if (checkDuplicate(_t, matchedList)) {
                 matchedList.push(_t)
-                request.get(appConfig.urls.home + '/' + _t + '/files', (err, res) => {
+                let tryUrl = appConfig.urls.home + '/' + _t + '/files'
+                request.get(tryUrl, (err, res) => {
                     if (err) {
                         //console.log(err)
                         return
@@ -36,6 +38,7 @@ function matchAddon(title, matchedList) {
                     //console.log('hyphen found')
                     no_match = false
                     resolve(res.body.toString())
+                    history[origin_title] = tryUrl
                     //return
                 })
             }
@@ -44,7 +47,8 @@ function matchAddon(title, matchedList) {
             let _t = t.split(' ')[0]
             if (checkDuplicate(_t, matchedList)) {
                 matchedList.push(_t)
-                request.get(appConfig.urls.home + '/' + _t + '/files', (err, res) => {
+                let tryUrl = appConfig.urls.home + '/' + _t + '/files'
+                request.get(tryUrl, (err, res) => {
                     if (err) {
                         //console.log(err)
                         return
@@ -57,6 +61,7 @@ function matchAddon(title, matchedList) {
                     //console.log('init found')
                     no_match = false
                     resolve(res.body.toString())
+                    history[origin_title] = tryUrl
                     //return
                 })
             }
@@ -68,7 +73,8 @@ function matchAddon(title, matchedList) {
             })
             if (checkDuplicate(_t, matchedList)) {
                 matchedList.push(_t)
-                request.get(appConfig.urls.home + '/' + _t + '/files', (err, res) => {
+                let tryUrl = appConfig.urls.home + '/' + _t + '/files'
+                request.get(tryUrl, (err, res) => {
                     if (err) {
                         //console.log(err)
                         return
@@ -81,6 +87,7 @@ function matchAddon(title, matchedList) {
                     //console.log('init found')
                     no_match = false
                     resolve(res.body.toString())
+                    history[origin_title] = tryUrl
                     //return
                 })
             }

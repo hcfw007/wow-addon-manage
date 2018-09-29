@@ -3,6 +3,8 @@ const appConfig = require('./appConfig.js')
 const cheerio = require('cheerio')
 const matchAddon = require('./matchAddonCursePage.js')
 const getLocalAddonList = require('./getLocalAddonList.js')
+const fs = require('fs')
+const historyPath = './history.json'
 
 
 function checkUpdateableAddons(addonPath) {
@@ -10,9 +12,15 @@ function checkUpdateableAddons(addonPath) {
         let updateableAddonInfoList = []
         let matchPromiseList = []
         let matchedList = []
+        let history
+        if (fs.existsSync(historyPath)) {
+            history = JSON.parse(fs.readFileSync(historyPath).toString())
+        } else {
+            history = {}
+        }
         getLocalAddonList(addonPath).then(addonObjects => {
             addonObjects.forEach(addon => {
-                let matchPromise = matchAddon(addon.title, matchedList).then(addonPage => {
+                let matchPromise = matchAddon(addon.title, matchedList, history).then(addonPage => {
                     if (addonPage == "no match") {
                         return
                     }
@@ -44,6 +52,7 @@ function checkUpdateableAddons(addonPath) {
             console.log(matchedList)
             Promise.all(matchPromiseList).then(res => {
                 resolve(updateableAddonInfoList)
+                fs.writeFileSync(historyPath, JSON.stringify(history))
             }).catch(err => {
                 console.log(err)
             })
