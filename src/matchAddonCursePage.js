@@ -16,10 +16,23 @@ function matchAddon(title, matchedList, history) {
             tryAbbr(title_lower_seperated)
         }
         title = title.toLowerCase()
-        tryHyphen(title)
-        tryInit(title)
-        tryAbbr(title)
-        
+
+        if (history[origin_title]) {
+            request.get(history[origin_title], (err, res) => {
+                let $page = cheerio.load(res.body.toString())
+                if (err || $page('header.h2.no-sub.no-nav>h2').text() == 'Not found') {
+                    tryHyphen(title)
+                    tryInit(title)
+                    tryAbbr(title)
+                    delete history[origin_title]
+                } else {
+                    no_match = false
+                    console.log(origin_title + ' found in history')
+                    resolve(res.body.toString())
+                }
+            })
+        }
+
         function tryHyphen(t) {
             let _t = t.replace(/ /g, '-')
             if (checkDuplicate(_t, matchedList)) {
