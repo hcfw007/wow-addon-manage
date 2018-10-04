@@ -116,12 +116,7 @@ function matchAddon(title, matchedList, history) {
 }
 
 function checkDuplicate(title, matchedList) {
-    for (let i in matchedList) {
-        if (matchedList[i] == title) {
-            return false
-        }
-    }
-    return true
+    return (matchedList.indexOf(title) == -1)
 }
 
 module.exports = matchAddon
