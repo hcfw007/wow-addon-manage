@@ -5,3 +5,4 @@ src/config.json
 config.json
 bundle.js
 history.json
+cache/
