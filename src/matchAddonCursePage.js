@@ -6,6 +6,20 @@ function matchAddon(title, matchedList, history) {
     return new Promise((resolve, reject) => {
         let origin_title = title
         let no_match = true
+        
+        if (history[origin_title]) {
+            request.get(history[origin_title], (err, res) => {
+                let $page = cheerio.load(res.body.toString())
+                if (err || $page('header.h2.no-sub.no-nav>h2').text() == 'Not found') {
+                    delete history[origin_title]
+                } else {
+                    no_match = false
+                    console.log(origin_title + ' found in history')
+                    resolve(res.body.toString())
+                }
+            })
+        }
+
         title_upper_seperated = title.replace(/\S[A-Z][a-z]+?/g, function(word) {
             return word[0] + " " + word.slice(1)
         })
@@ -16,22 +30,9 @@ function matchAddon(title, matchedList, history) {
             tryAbbr(title_lower_seperated)
         }
         title = title.toLowerCase()
-
-        if (history[origin_title]) {
-            request.get(history[origin_title], (err, res) => {
-                let $page = cheerio.load(res.body.toString())
-                if (err || $page('header.h2.no-sub.no-nav>h2').text() == 'Not found') {
-                    tryHyphen(title)
-                    tryInit(title)
-                    tryAbbr(title)
-                    delete history[origin_title]
-                } else {
-                    no_match = false
-                    console.log(origin_title + ' found in history')
-                    resolve(res.body.toString())
-                }
-            })
-        }
+        tryHyphen(title)
+        tryInit(title)
+        tryAbbr(title)
 
         function tryHyphen(t) {
             let _t = t.replace(/ /g, '-')
