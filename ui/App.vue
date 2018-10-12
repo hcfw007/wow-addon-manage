@@ -127,6 +127,7 @@ export default {
       return false
     },
     update: function(addon) {
+      this.$toast('start to update...')
       this.status = "updating"
       addon.status = "updating"
       let fileName = addon.name + ".zip"
