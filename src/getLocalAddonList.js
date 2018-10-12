@@ -1,6 +1,7 @@
 const fs = require('fs')
 const appConfig = require('./appConfig')
 const addonTocReader = require('./addonTocReader')
+const cacheControl = require('./cacheControl')
 
 function getLocalAddonList(addonPath) {
     return new Promise((resolve, reject) => {
@@ -8,6 +9,10 @@ function getLocalAddonList(addonPath) {
             _addonObjects = []
             files.forEach(file => {
                 try {
+                    if (cacheControl.getCache()[file] && files.indexOf(cacheControl.getCache()[file]) != -1 && file != cacheControl.getCache()[file]) {
+                        console.log(file, 'ignored due to it\' s a part of', (cacheControl.getCache()[file]))
+                        return
+                    }
                     let tocFile = addonPath + '/' + file + '/' + file + '.toc'
                     let data = fs.readFileSync(tocFile)
                     let addonObject = addonTocReader(data.toString())
