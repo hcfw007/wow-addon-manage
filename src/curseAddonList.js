@@ -2,8 +2,8 @@ const request = require('request')
 const cheerio = require('cheerio')
 const fs = require('fs')
 const path = require('path')
-const appConfig = require('./src/appConfig.js')
-const pageControl = require('./src/pageControl.js')
+const appConfig = require('./appConfig.js')
+const pageControl = require('./pageControl.js')
 
 function getAddonHomePage () {
     return new Promise((resolve, reject) => {
@@ -87,7 +87,9 @@ async function getAddonCatagories(homepage) {
     return list
 }
 
+const curse = {
+    getPageAddonList: getPageAddonList,
+    getAddonCatagories: getAddonCatagories,
+}
 
-getPageAddonList(getAddonHomePage()).then(val => {
-    console.log(val)
-})
+module.exports = curse
