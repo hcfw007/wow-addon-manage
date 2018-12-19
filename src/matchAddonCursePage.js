@@ -21,7 +21,7 @@ function matchAddon(title, matchedList, history) {
         }
 
         title_upper_seperated = title.replace(/\S[A-Z][a-z]+?/g, function(word) {
-            return word[0] + " " + word.slice(1)
+            return word[0] + ' ' + word.slice(1)
         })
         if (title_upper_seperated != title) {
             let title_lower_seperated = title_upper_seperated.toLowerCase()

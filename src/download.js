@@ -14,14 +14,14 @@ function download(url, filename = 'temp.zip') {
         console.log(appConfig.urls.base + url + '/file')
         request.get({url: appConfig.urls.base + url + '/file',}).pipe(writeStream) //It somehow works in a better network environment
         writeStream.on('finish', function() {
-            resolve("success")
+            resolve('success')
         })
         writeStream.on('error', function(err) {
             console.log(err)
-            reject("error")
+            reject('error')
         })
         setTimeout(() => {
-            reject("time out")
+            reject('time out')
         }, 20000)
     })
     

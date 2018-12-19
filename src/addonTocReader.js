@@ -10,19 +10,19 @@ function addonTocReader(addonStr) {
     }
     for (let i in lines) {
         if (lines[i].length <= 1) continue
-        if (lines[i][0] == "#" && lines[i][1] == "#") {
+        if (lines[i][0] == '#' && lines[i][1] == '#') {
             let propertyName = lines[i].split(':')[0].slice(3)
             let propertyValue = ''
             let _line = lines[i].split(':')
             for (let j = 1; j < _line.length; j ++) {
-                if (parseInt(j) > 1) propertyValue += ":"
+                if (parseInt(j) > 1) propertyValue += ':'
                 propertyValue += _line[j]
             }
             if (!propertyValue) {
                 toc.otherProperties.push(lines[i])
                 continue
             }
-            if (propertyValue[0] == " ") propertyValue = propertyValue.slice(1)
+            if (propertyValue[0] == ' ') propertyValue = propertyValue.slice(1)
             toc[propertyName.toLowerCase()] = titleTrimmer(propertyValue)
         } else {
             
@@ -47,7 +47,7 @@ function readline(str, index) {
 
 function titleTrimmer(title) {
     //I should really learn Reg now
-    _title = ""
+    _title = ''
     for (let i = 0; i < title.length; i ++) {
         if (title[i] != '|') {
             _title += title[i]

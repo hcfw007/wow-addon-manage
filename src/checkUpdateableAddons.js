@@ -26,7 +26,7 @@ function checkUpdateableAddons(addonPath) {
         getLocalAddonList(addonPath).then(addonObjects => {
             addonObjects.forEach(addon => {
                 let matchPromise = matchAddon(addon.title, matchedList, history).then(addonPage => {
-                    if (addonPage == "no match") {
+                    if (addonPage == 'no match') {
                         return
                     }
                     $download = cheerio.load(addonPage)
