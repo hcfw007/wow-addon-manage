@@ -1,5 +1,3 @@
-const request = require('request')
-const appConfig = require('./appConfig.js')
 const cheerio = require('cheerio')
 const matchAddon = require('./matchAddonCursePage.js')
 const getLocalAddonList = require('./getLocalAddonList.js')
@@ -29,9 +27,9 @@ function checkUpdateableAddons(addonPath) {
                     if (addonPage == 'no match') {
                         return
                     }
-                    $download = cheerio.load(addonPage)
+                    let $download = cheerio.load(addonPage)
                     let name = $download('div.project-header__details>h2.name').text()
-                    let fileList = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a')
+                    //let fileList = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a')
                     let latestVersion = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a').find('tbody tr:first-child').find('td.project-file__name').attr('title')
                     let downloadURL = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a').find('tbody tr:first-child').find('a.button.button--download.download-button.mg-r-05').attr('href')
                     let gameVersion = $download('table.listing.listing-project-file.project-file-listing.b-table.b-table-a').find('tbody tr:first-child').find('span.table__content.version__label').text()
@@ -55,11 +53,12 @@ function checkUpdateableAddons(addonPath) {
                 matchPromiseList.push(matchPromise)
             })
             console.log(matchedList)
-            Promise.all(matchPromiseList).then(res => {
+            Promise.all(matchPromiseList).then(() => {
                 resolve(updateableAddonInfoList)
                 fs.writeFileSync(historyPath + historyFile, JSON.stringify(history))
             }).catch(err => {
                 console.log(err)
+                reject(err)
             })
         })
     })

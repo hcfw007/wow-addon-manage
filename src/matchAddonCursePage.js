@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const appConfig = require('./appConfig.js')
 
 function matchAddon(title, matchedList, history) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         let origin_title = title
         let no_match = true
         
@@ -20,7 +20,7 @@ function matchAddon(title, matchedList, history) {
             })
         }
 
-        title_upper_seperated = title.replace(/\S[A-Z][a-z]+?/g, function(word) {
+        let title_upper_seperated = title.replace(/\S[A-Z][a-z]+?/g, function(word) {
             return word[0] + ' ' + word.slice(1)
         })
         if (title_upper_seperated != title) {

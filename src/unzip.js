@@ -1,5 +1,4 @@
 const Zip = require('adm-zip')
-const fs = require('fs')
 const cacheControl = require('./cacheControl.js')
 
 function unzip(file, addonPath) {

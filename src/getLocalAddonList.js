@@ -6,7 +6,10 @@ const cacheControl = require('./cacheControl')
 function getLocalAddonList(addonPath) {
     return new Promise((resolve, reject) => {
         fs.readdir(addonPath, (err, files) => {
-            _addonObjects = []
+            if (err) {
+                reject(err)
+            }
+            let _addonObjects = []
             files.forEach(file => {
                 try {
                     if (cacheControl.getCache()[file] && files.indexOf(cacheControl.getCache()[file]) != -1 && file != cacheControl.getCache()[file]) {
@@ -22,7 +25,7 @@ function getLocalAddonList(addonPath) {
                     //console.log(err)
                 }
             })
-            addonObjects = []
+            let addonObjects = []
             for (let i in _addonObjects) {
                 if (addonFilter(_addonObjects[i])) {
                     _addonObjects[i].title = addonFilter(_addonObjects[i])

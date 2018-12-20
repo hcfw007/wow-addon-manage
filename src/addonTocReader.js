@@ -24,8 +24,6 @@ function addonTocReader(addonStr) {
             }
             if (propertyValue[0] == ' ') propertyValue = propertyValue.slice(1)
             toc[propertyName.toLowerCase()] = titleTrimmer(propertyValue)
-        } else {
-            
         }
     }
     return toc
@@ -47,7 +45,7 @@ function readline(str, index) {
 
 function titleTrimmer(title) {
     //I should really learn Reg now
-    _title = ''
+    let _title = ''
     for (let i = 0; i < title.length; i ++) {
         if (title[i] != '|') {
             _title += title[i]
